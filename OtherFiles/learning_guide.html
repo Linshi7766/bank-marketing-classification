@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 数据分析与机器学习 — 完全学习指南</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-soft: #f8fafc;
+            --bg-code: #f1f5f9;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-2: #64748b;
+            --text-3: #94a3b8;
+            --accent: #3b82f6;
+            --accent-soft: #dbeafe;
+            --green: #22c55e;
+            --green-soft: #dcfce7;
+            --orange: #f97316;
+            --orange-soft: #fff7ed;
+            --purple: #8b5cf6;
+            --purple-soft: #f3e8ff;
+            --red: #ef4444;
+            --red-soft: #fef2f2;
+            --cyan: #06b6d4;
+            --cyan-soft: #ecfeff;
+            --pink: #ec4899;
+            --pink-soft: #fdf2f8;
+            --radius: 10px;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,.07);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            font-size: 15px;
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ─── Sidebar ─── */
+        .sidebar {
+            position: fixed; left: 0; top: 0; bottom: 0;
+            width: 260px; background: var(--bg-soft);
+            border-right: 1px solid var(--border);
+            overflow-y: auto; padding: 20px 0; z-index: 100;
+            transition: transform .3s;
+        }
+        .sidebar-title {
+            font-size: .95rem; font-weight: 700; color: var(--text);
+            padding: 0 20px 12px; border-bottom: 1px solid var(--border);
+            margin-bottom: 8px;
+        }
+        .sidebar a {
+            display: block; padding: 6px 20px; font-size: .82rem;
+            color: var(--text-2); border-left: 3px solid transparent;
+            transition: all .15s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--accent-soft); color: var(--accent);
+            border-left-color: var(--accent); text-decoration: none;
+        }
+        .sidebar .nav-group-title {
+            font-size: .7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .08em; color: var(--text-3);
+            padding: 14px 20px 4px;
+        }
+        .menu-btn {
+            display: none; position: fixed; bottom: 20px; right: 20px;
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--accent); color: #fff; border: none;
+            font-size: 1.3rem; cursor: pointer; z-index: 200;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ─── Main ─── */
+        .main { margin-left: 260px; padding: 0 0 80px; }
+
+        /* ─── Hero ─── */
+        .hero {
+            background: linear-gradient(135deg, #1e3a5f 0%, #3b82f6 60%, #8b5cf6 100%);
+            color: #fff; padding: 64px 48px 56px;
+        }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -.02em; }
+        .hero .sub { font-size: 1.05rem; opacity: .85; max-width: 600px; }
+        .hero .tags { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .hero .tag {
+            padding: 4px 14px; border-radius: 20px; font-size: .78rem;
+            background: rgba(255,255,255,.15); backdrop-filter: blur(4px);
+        }
+
+        /* ─── Content area ─── */
+        .content { max-width: 820px; margin: 0 auto; padding: 0 32px; }
+
+        /* ─── Section ─── */
+        .section {
+            margin-top: 52px;
+            scroll-margin-top: 24px;
+        }
+        .section-label {
+            display: inline-block; font-size: .68rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .1em;
+            padding: 3px 12px; border-radius: 4px; margin-bottom: 8px;
+        }
+        .section-label.blue { background: var(--accent-soft); color: var(--accent); }
+        .section-label.green { background: var(--green-soft); color: #16a34a; }
+        .section-label.orange { background: var(--orange-soft); color: #ea580c; }
+        .section-label.purple { background: var(--purple-soft); color: var(--purple); }
+        .section-label.red { background: var(--red-soft); color: var(--red); }
+        .section-label.cyan { background: var(--cyan-soft); color: #0891b2; }
+        .section-label.pink { background: var(--pink-soft); color: var(--pink); }
+
+        h2 {
+            font-size: 1.5rem; font-weight: 700; margin-bottom: 6px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        h2 .emoji { font-size: 1.3rem; }
+        h3 {
+            font-size: 1.12rem; font-weight: 600; margin: 28px 0 10px;
+            padding-bottom: 6px; border-bottom: 1px solid var(--border);
+        }
+        h4 { font-size: .95rem; font-weight: 600; margin: 18px 0 6px; color: var(--text-2); }
+        p { margin: 8px 0; }
+
+        /* ─── Card ─── */
+        .card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin: 16px 0;
+            box-shadow: var(--shadow);
+        }
+        .card.highlight { border-left: 4px solid var(--accent); }
+        .card.warn { border-left: 4px solid var(--orange); background: var(--orange-soft); }
+        .card.tip { border-left: 4px solid var(--green); background: var(--green-soft); }
+        .card.important { border-left: 4px solid var(--red); background: var(--red-soft); }
+
+        /* ─── Code blocks ─── */
+        pre {
+            background: #0f172a; color: #e2e8f0;
+            border-radius: var(--radius);
+            padding: 18px 22px; margin: 14px 0;
+            overflow-x: auto; font-size: .84rem; line-height: 1.6;
+            position: relative;
+        }
+        pre .comment { color: #64748b; }
+        pre .keyword { color: #c084fc; }
+        pre .string { color: #86efac; }
+        pre .func { color: #67e8f9; }
+        pre .number { color: #fbbf24; }
+        pre .builtin { color: #f472b6; }
+        pre .op { color: #94a3b8; }
+        pre .output {
+            display: block; margin-top: 12px; padding-top: 12px;
+            border-top: 1px dashed #334155; color: #94a3b8;
+        }
+        pre .output::before { content: "# 输出："; color: #475569; }
+        code {
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+            background: var(--bg-code); padding: 2px 6px; border-radius: 4px;
+            font-size: .86em; color: #be185d;
+        }
+        pre code { background: none; padding: 0; color: inherit; }
+
+        /* ─── Tables ─── */
+        table {
+            width: 100%; border-collapse: collapse; margin: 14px 0;
+            font-size: .88rem;
+        }
+        th {
+            background: var(--bg-soft); font-weight: 600; text-align: left;
+            padding: 10px 14px; border-bottom: 2px solid var(--border);
+        }
+        td {
+            padding: 10px 14px; border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        tr:hover td { background: var(--bg-soft); }
+
+        /* ─── Flow diagram ─── */
+        .flow {
+            display: flex; align-items: center; gap: 0;
+            margin: 20px 0; flex-wrap: wrap; justify-content: center;
+        }
+        .flow-step {
+            padding: 10px 18px; border-radius: 8px;
+            font-size: .85rem; font-weight: 600; text-align: center;
+            min-width: 100px;
+        }
+        .flow-arrow { font-size: 1.2rem; color: var(--text-3); padding: 0 6px; }
+
+        /* ─── Checklist ─── */
+        .check-list { list-style: none; }
+        .check-list li {
+            padding: 5px 0 5px 28px; position: relative;
+        }
+        .check-list li::before {
+            content: "☐"; position: absolute; left: 0; top: 5px;
+            color: var(--text-3); font-size: 1rem;
+        }
+        .check-list li.done::before { content: "☑"; color: var(--green); }
+        .check-list li.done { color: var(--text-3); }
+
+        /* ─── Grid cards ─── */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 16px 0; }
+        .grid .card { margin: 0; }
+        .grid .card h4 { margin-top: 0; }
+
+        /* ─── Algo card ─── */
+        .algo-card {
+            border: 1px solid var(--border); border-radius: var(--radius);
+            margin: 16px 0; overflow: hidden;
+        }
+        .algo-head {
+            padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; user-select: none; background: var(--bg-soft);
+        }
+        .algo-head:hover { background: var(--accent-soft); }
+        .algo-icon {
+            width: 36px; height: 36px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .algo-head .algo-title { font-weight: 600; flex: 1; font-size: .95rem; }
+        .algo-head .algo-type {
+            font-size: .7rem; padding: 2px 10px; border-radius: 12px;
+            font-weight: 500;
+        }
+        .algo-body { display: none; padding: 0 20px 20px; }
+        .algo-card.open .algo-body { display: block; }
+        .algo-card.open .algo-head { border-bottom: 1px solid var(--border); }
+
+        /* ─── Progress ─── */
+        .progress-bar-wrap {
+            position: fixed; top: 0; left: 260px; right: 0;
+            height: 3px; background: var(--border); z-index: 90;
+        }
+        .progress-bar-fill { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .hero { padding: 40px 24px; }
+            .hero h1 { font-size: 1.6rem; }
+            .content { padding: 0 16px; }
+            .menu-btn { display: flex; align-items: center; justify-content: center; }
+            .progress-bar-wrap { left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ─── Progress ─── -->
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="readProgress"></div></div>
+
+<!-- ─── Sidebar ─── -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-title">📖 学习导航</div>
+    <div class="nav-group-title">基础准备</div>
+    <a href="#roadmap">🗺️ 学习路线总览</a>
+    <a href="#env">🛠️ 环境搭建</a>
+    <a href="#py-ref">🐍 Python速查</a>
+    <div class="nav-group-title">数据分析</div>
+    <a href="#numpy">📦 NumPy 数值计算</a>
+    <a href="#pandas">📊 Pandas 数据处理</a>
+    <a href="#vis">📈 数据可视化</a>
+    <a href="#stats">📐 统计学基础</a>
+    <div class="nav-group-title">机器学习</a></div>
+    <a href="#ml-concepts">🧠 ML核心概念</a>
+    <a href="#supervised">🎯 监督学习</a>
+    <a href="#unsupervised">🔍 无监督学习</a>
+    <a href="#model-eval">✅ 模型评估</a>
+    <div class="nav-group-title">实战进阶</div>
+    <a href="#workflow">🔄 完整工作流</a>
+    <a href="#feature-eng">⚙️ 特征工程</a>
+    <a href="#projects">🚀 实战项目</a>
+    <a href="#resources">📚 学习资源</a>
+</nav>
+
+<button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('show')">☰</button>
+
+<!-- ─── Main ─── -->
+<div class="main">
+
+<div class="hero">
+    <h1>Python 数据分析与机器学习</h1>
+    <p class="sub">不依赖任何教材，从零到独立完成项目的完整知识体系。涵盖 NumPy、Pandas、Matplotlib、scikit-learn，附带可运行代码。</p>
+    <div class="tags">
+        <span class="tag">Python 3.x</span>
+        <span class="tag">NumPy</span>
+        <span class="tag">Pandas</span>
+        <span class="tag">Matplotlib</span>
+        <span class="tag">Seaborn</span>
+        <span class="tag">scikit-learn</span>
+        <span class="tag">机器学习</span>
+        <span class="tag">数据可视化</span>
+    </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  ROADMAP -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="roadmap">
+    <span class="section-label blue">总览</span>
+    <h2><span class="emoji">🗺️</span> 学习路线总览</h2>
+    <p>数据分析与机器学习不是一条直线，而是一个循环迭代的过程。下面是核心知识地图：</p>
+
+    <div class="flow">
+        <div class="flow-step" style="background:var(--accent-soft);color:#1e40af;">Python基础</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--cyan-soft);color:#0e7490;">NumPy</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--green-soft);color:#166534;">Pandas</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--purple-soft);color:#6b21a8;">可视化</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--orange-soft);color:#9a3412;">统计学</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--pink-soft);color:#9d174d;">机器学习</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--red-soft);color:#991b1b;">实战项目</div>
+    </div>
+
+    <div class="card highlight">
+        <strong>💡 核心理念：</strong>学数据分析不是"先学完理论再动手"，而是<strong>边学边用</strong>。每学一个工具，立刻拿真实数据练手。推荐用 Jupyter Notebook 交互式学习。
+    </div>
+
+    <table>
+        <thead><tr><th>阶段</th><th>核心技能</th><th>产出</th><th>建议时长</th></tr></thead>
+        <tbody>
+            <tr><td><strong>① 基础</strong></td><td>Python语法、数据类型、函数</td><td>能写脚本处理文本/文件</td><td>1–2 周</td></tr>
+            <tr><td><strong>② 数据处理</strong></td><td>NumPy + Pandas</td><td>能清洗、整理任意表格数据</td><td>2–3 周</td></tr>
+            <tr><td><strong>③ 可视化</strong></td><td>Matplotlib + Seaborn</td><td>能画出专业级统计图表</td><td>1 周</td></tr>
+            <tr><td><strong>④ 统计基础</strong></td><td>描述统计、分布、假设检验</td><td>能用数据讲故事</td><td>1 周</td></tr>
+            <tr><td><strong>⑤ 机器学习</strong></td><td>sklearn 8大算法</td><td>能建模预测、评估</td><td>2–3 周</td></tr>
+            <tr><td><strong>⑥ 实战</strong></td><td>完整项目流程</td><td>Kaggle完整提交</td><td>2 周</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  ENVIRONMENT -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="env">
+    <span class="section-label green">基础准备</span>
+    <h2><span class="emoji">🛠️</span> 环境搭建</h2>
+
+    <h3>方式一：Anaconda（推荐新手）</h3>
+    <p>自带 Python + 所有数据分析库 + Jupyter Notebook，一键搞定。</p>
+    <pre><code><span class="comment"># 下载地址：https://www.anaconda.com/download</span>
+<span class="comment"># 安装后在终端输入：</span>
+$ conda create -n ml python=<span class="number">3.11</span>
+$ conda activate ml
+$ conda install numpy pandas matplotlib seaborn scikit-learn jupyter</code></pre>
+
+    <h3>方式二：pip 手动安装</h3>
+    <pre><code>$ pip install numpy pandas matplotlib seaborn scikit-learn jupyter
+<span class="comment"># 启动 Jupyter</span>
+$ jupyter notebook</code></pre>
+
+    <h3>Jupyter Notebook 速查</h3>
+    <table>
+        <thead><tr><th>快捷键</th><th>功能</th></tr></thead>
+        <tbody>
+            <tr><td><code>Shift+Enter</code></td><td>运行当前单元格</td></tr>
+            <tr><td><code>Esc+A</code></td><td>在上方插入新单元格</td></tr>
+            <tr><td><code>Esc+B</code></td><td>在下方插入新单元格</td></tr>
+            <tr><td><code>Esc+DD</code></td><td>删除当前单元格</td></tr>
+            <tr><td><code>Esc+M</code></td><td>转为Markdown（写笔记）</td></tr>
+            <tr><td><code>Tab</code></td><td>代码补全</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PYTHON REFERENCE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="py-ref">
+    <span class="section-label blue">基础</span>
+    <h2><span class="emoji">🐍</span> Python 数据分析速查</h2>
+    <p>数据分析只需要掌握 Python 的<strong>30%</strong>核心语法。以下是最重要的部分：</p>
+
+    <h3>数据类型</h3>
+    <pre><code><span class="comment"># 五大常用类型</span>
+a = <span class="number">42</span>              <span class="comment"># int 整数</span>
+b = <span class="number">3.14</span>            <span class="comment"># float 浮点数</span>
+c = <span class="string">"hello"</span>         <span class="comment"># str 字符串</span>
+d = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]       <span class="comment"># list 列表（有序可变）</span>
+e = {<span class="string">"name"</span>: <span class="string">"Tom"</span>, <span class="string">"age"</span>: <span class="number">20</span>}  <span class="comment"># dict 字典（键值对）</span>
+
+<span class="comment"># 列表推导式（超常用！）</span>
+squares = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">10</span>)]
+<span class="comment"># [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</span>
+
+<span class="comment"># 字典推导式</span>
+word_len = {w: <span class="builtin">len</span>(w) <span class="keyword">for</span> w <span class="keyword">in</span> [<span class="string">"data"</span>, <span class="string">"ml"</span>, <span class="string">"python"</span>]}
+<span class="comment"># {'data': 4, 'ml': 2, 'python': 6}</span></code></pre>
+
+    <h3>函数</h3>
+    <pre><code><span class="keyword">def</span> <span class="func">clean_name</span>(name):
+    <span class="string">"""去除首尾空格并转小写"""</span>
+    <span class="keyword">return</span> name.strip().lower()
+
+<span class="comment"># lambda 一行函数（数据分析常用）</span>
+double = <span class="keyword">lambda</span> x: x * <span class="number">2</span>
+
+<span class="comment"># map/filter 对批量数据操作</span>
+names = [<span class="string">"  Alice "</span>, <span class="string">"BOB  "</span>, <span class="string">" Charlie"</span>]
+cleaned = <span class="builtin">list</span>(<span class="builtin">map</span>(clean_name, names))
+<span class="comment"># ['alice', 'bob', 'charlie']</span></code></pre>
+
+    <h3>文件读写</h3>
+    <pre><code><span class="comment"># 读取文本文件</span>
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"data.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:
+    content = f.read()       <span class="comment"># 读全部</span>
+    lines = f.readlines()    <span class="comment"># 按行读取列表</span>
+
+<span class="comment"># 写入文件</span>
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"output.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    f.write(<span class="string">"hello\n"</span>)</code></pre>
+
+    <div class="card warn">
+        <strong>⚠️ 数据分析不需要精通：</strong>OOP类继承、装饰器、元类、多线程、网络编程等高级特性。把精力放在 NumPy 和 Pandas 上。
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  NUMPY -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="numpy">
+    <span class="section-label cyan">数据处理</span>
+    <h2><span class="emoji">📦</span> NumPy — 数值计算引擎</h2>
+    <p>NumPy 是 Python 数据科学的<strong>地基</strong>。Pandas、scikit-learn、PyTorch 都建立在它之上。核心概念：<strong>ndarray 多维数组</strong> + <strong>向量化运算</strong>（避免 for 循环）。</p>
+
+    <h3>创建数组</h3>
+    <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># 从列表创建</span>
+a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])
+
+<span class="comment"># 常用创建方式</span>
+np.zeros(<span class="number">5</span>)                <span class="comment"># [0, 0, 0, 0, 0]</span>
+np.ones((<span class="number">3</span>, <span class="number">4</span>))             <span class="comment"># 3×4 全1矩阵</span>
+np.arange(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>)         <span class="comment"># [0, 2, 4, 6, 8]</span>
+np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">5</span>)        <span class="comment"># [0, 0.25, 0.5, 0.75, 1.0]</span>
+np.random.randn(<span class="number">3</span>, <span class="number">3</span>)       <span class="comment"># 3×3 标准正态分布</span>
+
+<span class="comment"># 关键属性</span>
+a.shape      <span class="comment"># 形状</span>
+a.dtype      <span class="comment"># 数据类型</span>
+a.ndim       <span class="comment"># 维度数</span>
+a.size       <span class="comment"># 元素总数</span></code></pre>
+
+    <h3>索引与切片</h3>
+    <pre><code>arr = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])
+<span class="comment"># [[1, 2, 3],</span>
+<span class="comment">#  [4, 5, 6],</span>
+<span class="comment">#  [7, 8, 9]]</span>
+
+arr[<span class="number">0</span>, <span class="number">2</span>]        <span class="comment"># 3 （第0行第2列）</span>
+arr[:, <span class="number">1</span>]        <span class="comment"># [2, 5, 8] （所有行的第1列）</span>
+arr[<span class="number">1</span>, :]        <span class="comment"># [4, 5, 6] （第1行全部）</span>
+arr[arr > <span class="number">5</span>]     <span class="comment"># [6, 7, 8, 9] （布尔索引，超常用！）</span></code></pre>
+
+    <h3>向量化运算（核心！）</h3>
+    <pre><code>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])
+b = np.array([<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>])
+
+a + b           <span class="comment"># [5, 7, 9]    逐元素加法</span>
+a * b           <span class="comment"># [4, 10, 18]  逐元素乘法</span>
+a ** <span class="number">2</span>          <span class="comment"># [1, 4, 9]    逐元素平方</span>
+np.sqrt(a)      <span class="comment"># [1, 1.414, 1.732]</span>
+np.dot(a, b)    <span class="comment"># 32           点积</span>
+
+<span class="comment"># 统计函数</span>
+a.mean()        <span class="comment"># 均值</span>
+a.std()         <span class="comment"># 标准差</span>
+a.<span class="builtin">sum</span>()         <span class="comment"># 求和</span>
+a.min()         <span class="comment"># 最小值</span>
+np.median(a)    <span class="comment"># 中位数</span></code></pre>
+
+    <h3>广播机制（Broadcasting）</h3>
+    <pre><code><span class="comment"># 不同形状的数组也能运算！NumPy自动"广播"</span>
+matrix = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])
+vector = np.array([<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>])
+
+matrix + vector
+<span class="comment"># [[11, 22, 33],</span>
+<span class="comment">#  [14, 25, 36]]</span>
+<span class="comment"># vector 被"广播"到每一行！</span></code></pre>
+
+    <div class="card tip">
+        <strong>✅ 记住：</strong>永远优先用 NumPy 向量化运算代替 Python for 循环。同样操作，向量化快 10–100 倍。
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PANDAS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="pandas">
+    <span class="section-label green">数据处理</span>
+    <h2><span class="emoji">📊</span> Pandas — 数据分析核心</h2>
+    <p>Pandas 是数据分析的<strong>瑞士军刀</strong>。两个核心对象：<code>Series</code>（一列）和 <code>DataFrame</code>（一张表）。</p>
+
+    <h3>创建与读取</h3>
+    <pre><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># 从字典创建</span>
+df = pd.DataFrame({
+    <span class="string">"姓名"</span>: [<span class="string">"张三"</span>, <span class="string">"李四"</span>, <span class="string">"王五"</span>, <span class="string">"赵六"</span>],
+    <span class="string">"年龄"</span>: [<span class="number">20</span>, <span class="number">22</span>, <span class="number">21</span>, <span class="number">23</span>],
+    <span class="string">"成绩"</span>: [<span class="number">85</span>, <span class="number">92</span>, <span class="number">78</span>, <span class="number">96</span>]
+})
+
+<span class="comment"># 从文件读取（最常用！）</span>
+df = pd.read_csv(<span class="string">"data.csv"</span>)         <span class="comment"># CSV</span>
+df = pd.read_excel(<span class="string">"data.xlsx"</span>)      <span class="comment"># Excel</span>
+df = pd.read_csv(<span class="string">"https://xxx/data.csv"</span>)  <span class="comment"># 直接读URL</span></code></pre>
+
+    <h3>快速探索数据（EDA）</h3>
+    <pre><code>df.head(<span class="number">5</span>)        <span class="comment"># 前5行</span>
+df.shape          <span class="comment"># (行数, 列数)</span>
+df.info()         <span class="comment"># 列名、类型、非空数</span>
+df.describe()     <span class="comment"># 数值列的统计摘要</span>
+df.dtypes         <span class="comment"># 每列数据类型</span>
+df.isnull().<span class="builtin">sum</span>() <span class="comment"># 每列缺失值数量</span></code></pre>
+
+    <h3>取值（最重要的操作）</h3>
+    <pre><code><span class="comment"># 选列</span>
+df[<span class="string">"姓名"</span>]              <span class="comment"># 单列 → Series</span>
+df[[<span class="string">"姓名"</span>, <span class="string">"成绩"</span>]]    <span class="comment"># 多列 → DataFrame</span>
+
+<span class="comment"># loc：按标签取值 [行标签, 列标签]</span>
+df.loc[<span class="number">0</span>]                         <span class="comment"># 第0行</span>
+df.loc[<span class="number">0</span>:<span class="number">2</span>, <span class="string">"姓名"</span>:<span class="string">"年龄"</span>]        <span class="comment"># 行0到2、列姓名到年龄</span>
+df.loc[df[<span class="string">"成绩"</span>] > <span class="number">90</span>]            <span class="comment"># 成绩>90的行</span>
+
+<span class="comment"># iloc：按位置取值（纯数字索引）</span>
+df.iloc[<span class="number">0</span>:<span class="number">2</span>, <span class="number">0</span>:<span class="number">2</span>]                <span class="comment"># 前2行、前2列</span></code></pre>
+
+    <h3>数据清洗</h3>
+    <pre><code><span class="comment"># 处理缺失值</span>
+df.dropna()                   <span class="comment"># 删除含缺失值的行</span>
+df[<span class="string">"年龄"</span>].fillna(df[<span class="string">"年龄"</span>].mean())  <span class="comment"># 用均值填充</span>
+
+<span class="comment"># 处理重复值</span>
+df.drop_duplicates()
+
+<span class="comment"># 数据类型转换</span>
+df[<span class="string">"日期"</span>] = pd.to_datetime(df[<span class="string">"日期"</span>])
+
+<span class="comment"># 字符串操作</span>
+df[<span class="string">"姓名"</span>].str.strip()       <span class="comment"># 去空格</span>
+df[<span class="string">"姓名"</span>].str.lower()       <span class="comment"># 转小写</span></code></pre>
+
+    <h3>分组聚合（groupby）</h3>
+    <pre><code><span class="comment"># 按某列分组，计算统计量</span>
+df.groupby(<span class="string">"班级"</span>)[<span class="string">"成绩"</span>].mean()
+
+<span class="comment"># 多种聚合</span>
+df.groupby(<span class="string">"班级"</span>)[<span class="string">"成绩"</span>].agg([<span class="string">"mean"</span>, <span class="string">"max"</span>, <span class="string">"count"</span>])
+
+<span class="comment"># 透视表</span>
+pd.pivot_table(df, values=<span class="string">"成绩"</span>, index=<span class="string">"班级"</span>, columns=<span class="string">"性别"</span>, aggfunc=<span class="string">"mean"</span>)</code></pre>
+
+    <h3>数据变换</h3>
+    <pre><code><span class="comment"># 新增列</span>
+df[<span class="string">"等级"</span>] = df[<span class="string">"成绩"</span>].apply(<span class="keyword">lambda</span> x: <span class="string">"A"</span> <span class="keyword">if</span> x>=<span class="number">90</span> <span class="keyword">else</span> <span class="string">"B"</span> <span class="keyword">if</span> x>=<span class="number">80</span> <span class="keyword">else</span> <span class="string">"C"</span>)
+
+<span class="comment"># 排序</span>
+df.sort_values(<span class="string">"成绩"</span>, ascending=<span class="keyword">False</span>)
+
+<span class="comment"># 归一化（Min-Max）</span>
+df[<span class="string">"成绩_norm"</span>] = (df[<span class="string">"成绩"</span>] - df[<span class="string">"成绩"</span>].min()) / (df[<span class="string">"成绩"</span>].max() - df[<span class="string">"成绩"</span>].min())
+
+<span class="comment"># 保存结果</span>
+df.to_csv(<span class="string">"output.csv"</span>, index=<span class="keyword">False</span>)
+df.to_excel(<span class="string">"output.xlsx"</span>, index=<span class="keyword">False</span>)</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  VISUALIZATION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="vis">
+    <span class="section-label purple">可视化</span>
+    <h2><span class="emoji">📈</span> 数据可视化</h2>
+    <p>Matplotlib 是底层绑图引擎，Seaborn 是基于它的统计可视化高级封装。两者配合使用。</p>
+
+    <h3>Matplotlib 基础</h3>
+    <pre><code><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># 折线图</span>
+x = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]
+y = [<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>]
+plt.plot(x, y, marker=<span class="string">"o"</span>, label=<span class="string">"增长趋势"</span>)
+plt.xlabel(<span class="string">"月份"</span>)
+plt.ylabel(<span class="string">"销售额"</span>)
+plt.title(<span class="string">"月度销售趋势"</span>)
+plt.legend()
+plt.grid(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)
+plt.savefig(<span class="string">"chart.png"</span>, dpi=<span class="number">150</span>, bbox_inches=<span class="string">"tight"</span>)
+plt.show()</code></pre>
+
+    <h3>常用图表速查</h3>
+    <div class="grid">
+        <div class="card">
+            <h4>📊 柱状图</h4>
+            <pre><code>plt.bar(x, height)
+<span class="comment"># 分类对比</span></code></pre>
+        </div>
+        <div class="card">
+            <h4>🥧 饼图</h4>
+            <pre><code>plt.pie(sizes, labels=names,
+        autopct=<span class="string">"%1.1f%%"</span>)
+<span class="comment"># 占比展示</span></code></pre>
+        </div>
+        <div class="card">
+            <h4>⚬ 散点图</h4>
+            <pre><code>plt.scatter(x, y, c=color,
+            s=size, alpha=<span class="number">0.6</span>)
+<span class="comment"># 相关性探索</span></code></pre>
+        </div>
+        <div class="card">
+            <h4>📉 直方图</h4>
+            <pre><code>plt.hist(data, bins=<span class="number">30</span>,
+         edgecolor=<span class="string">"white"</span>)
+<span class="comment"># 分布查看</span></code></pre>
+        </div>
+    </div>
+
+    <h3>Seaborn（统计可视化首选）</h3>
+    <pre><code><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+
+<span class="comment"># 关系图（散点 + 回归线）</span>
+sns.regplot(x=<span class="string">"年龄"</span>, y=<span class="string">"成绩"</span>, data=df)
+
+<span class="comment"># 箱线图（看分布和异常值）</span>
+sns.boxplot(x=<span class="string">"班级"</span>, y=<span class="string">"成绩"</span>, data=df)
+
+<span class="comment"># 热力图（看相关性矩阵）</span>
+sns.heatmap(df.corr(), annot=<span class="keyword">True</span>, cmap=<span class="string">"coolwarm"</span>)
+
+<span class="comment"># 成对关系图（一键看所有变量两两关系）</span>
+sns.pairplot(df, hue=<span class="string">"等级"</span>)
+
+<span class="comment"># 小提琴图（分布形状）</span>
+sns.violinplot(x=<span class="string">"班级"</span>, y=<span class="string">"成绩"</span>, data=df)</code></pre>
+
+    <div class="card highlight">
+        <strong>💡 选择图表的原则：</strong><br>
+        • 看<strong>分布</strong> → 直方图、箱线图、小提琴图<br>
+        • 看<strong>对比</strong> → 柱状图<br>
+        • 看<strong>趋势</strong> → 折线图<br>
+        • 看<strong>相关性</strong> → 散点图、热力图<br>
+        • 看<strong>占比</strong> → 饼图（类别≤6时使用）
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  STATISTICS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="stats">
+    <span class="section-label orange">统计</span>
+    <h2><span class="emoji">📐</span> 统计学基础</h2>
+    <p>不需要数学系水平的统计学。以下是数据分析必须掌握的核心概念：</p>
+
+    <h3>描述统计</h3>
+    <pre><code>data = [<span class="number">23</span>, <span class="number">25</span>, <span class="number">28</span>, <span class="number">30</span>, <span class="number">32</span>, <span class="number">35</span>, <span class="number">100</span>]
+
+np.mean(data)       <span class="comment"># 均值 = 39.0 （受极端值影响）</span>
+np.median(data)     <span class="comment"># 中位数 = 30 （不受极端值影响）</span>
+np.std(data)        <span class="comment"># 标准差（数据的离散程度）</span>
+np.var(data)        <span class="comment"># 方差</span>
+np.percentile(data, [<span class="number">25</span>, <span class="number">50</span>, <span class="number">75</span>])  <span class="comment"># 四分位数</span></code></pre>
+
+    <h3>核心概念</h3>
+    <table>
+        <thead><tr><th>概念</th><th>通俗解释</th><th>Python 实现</th></tr></thead>
+        <tbody>
+            <tr><td><strong>均值 vs 中位数</strong></td><td>均值被极端值拉偏，中位数更稳健</td><td><code>np.mean()</code> / <code>np.median()</code></td></tr>
+            <tr><td><strong>标准差</strong></td><td>数据"散开"的程度</td><td><code>np.std()</code></td></tr>
+            <tr><td><strong>正态分布</strong></td><td>钟形曲线，自然界最常见的分布</td><td><code>np.random.normal()</code></td></tr>
+            <tr><td><strong>相关系数</strong></td><td>两个变量"一起变"的程度（-1到1）</td><td><code>df.corr()</code></td></tr>
+            <tr><td><strong>偏度</strong></td><td>分布是否对称</td><td><code>df.skew()</code></td></tr>
+            <tr><td><strong>峰度</strong></td><td>分布是尖还是平</td><td><code>df.kurt()</code></td></tr>
+        </tbody>
+    </table>
+
+    <h3>相关性分析</h3>
+    <pre><code><span class="comment"># 计算相关系数矩阵</span>
+corr = df.corr()
+
+<span class="comment"># 用热力图可视化</span>
+sns.heatmap(corr, annot=<span class="keyword">True</span>, fmt=<span class="string">".2f"</span>,
+            cmap=<span class="string">"RdBu_r"</span>, center=<span class="number">0</span>,
+            square=<span class="keyword">True</span>)
+<span class="comment"># 接近 1：强正相关</span>
+<span class="comment"># 接近 0：无关</span>
+<span class="comment"># 接近 -1：强负相关</span></code></pre>
+
+    <div class="card warn">
+        <strong>⚠️ 相关≠因果！</strong>冰淇淋销量和溺水人数高度正相关，但不是冰淇淋导致溺水——是因为夏天（第三变量）同时导致两者上升。
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  ML CONCEPTS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="ml-concepts">
+    <span class="section-label red">机器学习</span>
+    <h2><span class="emoji">🧠</span> 机器学习核心概念</h2>
+
+    <h3>什么是机器学习？</h3>
+    <p>一句话：<strong>让机器从数据中自动发现规律，用规律对新数据做预测。</strong></p>
+
+    <div class="flow">
+        <div class="flow-step" style="background:var(--accent-soft);color:#1e40af;">已有数据</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--green-soft);color:#166534;">训练模型</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--purple-soft);color:#6b21a8;">学到规律</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:var(--orange-soft);color:#9a3412;">预测新数据</div>
+    </div>
+
+    <h3>三大类型</h3>
+    <div class="grid">
+        <div class="card">
+            <h4>🎯 监督学习</h4>
+            <p>数据有<strong>标签/答案</strong></p>
+            <p>例：根据历史数据预测房价</p>
+            <p>算法：线性回归、决策树、SVM…</p>
+        </div>
+        <div class="card">
+            <h4>🔍 无监督学习</h4>
+            <p>数据<strong>没有标签</strong></p>
+            <p>例：客户自动分群</p>
+            <p>算法：K-Means、PCA…</p>
+        </div>
+        <div class="card">
+            <h4>🎮 强化学习</h4>
+            <p>通过<strong>试错</strong>获得奖励</p>
+            <p>例：AlphaGo下棋</p>
+            <p>（本书不涉及）</p>
+        </div>
+    </div>
+
+    <h3>关键术语</h3>
+    <table>
+        <thead><tr><th>术语</th><th>含义</th><th>例子</th></tr></thead>
+        <tbody>
+            <tr><td><strong>特征（Feature）</strong></td><td>输入变量，用来做预测的</td><td>面积、楼层、地段</td></tr>
+            <tr><td><strong>标签（Label）</strong></td><td>要预测的目标</td><td>房价</td></tr>
+            <tr><td><strong>训练集</strong></td><td>用来训练模型的数据（约80%）</td><td>—</td></tr>
+            <tr><td><strong>测试集</strong></td><td>用来检验模型的数据（约20%）</td><td>—</td></tr>
+            <tr><td><strong>过拟合</strong></td><td>模型"死记硬背"，新数据表现差</td><td>——</td></tr>
+            <tr><td><strong>欠拟合</strong></td><td>模型太简单，连训练数据都学不好</td><td>——</td></tr>
+        </tbody>
+    </table>
+
+    <h3>sklearn 通用流程（所有算法都一样！）</h3>
+    <pre><code><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.xxx <span class="keyword">import</span> XxxModel          <span class="comment"># 1. 选模型</span>
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score <span class="comment"># 评估指标</span>
+
+<span class="comment"># 1. 准备数据</span>
+X = df[[<span class="string">"特征1"</span>, <span class="string">"特征2"</span>, ...]]  <span class="comment"># 特征矩阵</span>
+y = df[<span class="string">"标签"</span>]                   <span class="comment"># 标签向量</span>
+
+<span class="comment"># 2. 划分训练集/测试集</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>
+)
+
+<span class="comment"># 3. 创建模型 → 训练 → 预测</span>
+model = XxxModel()
+model.fit(X_train, y_train)          <span class="comment"># 训练</span>
+y_pred = model.predict(X_test)       <span class="comment"># 预测</span>
+
+<span class="comment"># 4. 评估</span>
+<span class="builtin">print</span>(accuracy_score(y_test, y_pred))</code></pre>
+
+    <div class="card important">
+        <strong>🔑 这个流程是万能的！</strong>换算法只需改第1步的 import 和第3步的 Model 名字，其他完全一样。<code>fit → predict</code> 是 sklearn 的灵魂。
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SUPERVISED LEARNING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="supervised">
+    <span class="section-label red">监督学习</span>
+    <h2><span class="emoji">🎯</span> 监督学习算法详解</h2>
+    <p>有标签数据，预测<strong>连续值</strong>叫回归，预测<strong>离散类别</strong>叫分类。</p>
+
+    <!-- 线性回归 -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--accent-soft);">📈</div>
+            <div class="algo-title">线性回归 Linear Regression</div>
+            <div class="algo-type" style="background:var(--accent-soft);color:var(--accent);">回归</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>找一条直线 y = wx + b，使预测值和真实值的误差最小。</p>
+            <p><strong>适用：</strong>预测连续数值（房价、销量、温度…）</p>
+            <pre><code><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+<span class="comment"># 查看系数（特征重要性）</span>
+<span class="builtin">print</span>(model.coef_)        <span class="comment"># 每个特征的权重</span>
+<span class="builtin">print</span>(model.intercept_)   <span class="comment"># 截距</span></code></pre>
+            <p><strong>优点：</strong>简单、可解释、计算快<br>
+            <strong>缺点：</strong>只能拟合线性关系，对异常值敏感</p>
+        </div>
+    </div>
+
+    <!-- 逻辑回归 -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--green-soft);">🔀</div>
+            <div class="algo-title">逻辑回归 Logistic Regression</div>
+            <div class="algo-type" style="background:var(--green-soft);color:#16a34a;">分类</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>名字带"回归"，实际是分类算法！用 Sigmoid 函数把输出压到 0~1 概率。</p>
+            <p><strong>适用：</strong>二分类问题（是/否、通过/不通过、垃圾邮件/正常…）</p>
+            <pre><code><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression
+
+model = LogisticRegression(max_iter=<span class="number">1000</span>)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)         <span class="comment"># 类别</span>
+y_prob = model.predict_proba(X_test)   <span class="comment"># 概率</span></code></pre>
+            <p><strong>优点：</strong>输出概率、可解释性强<br>
+            <strong>缺点：</strong>对非线性关系拟合差</p>
+        </div>
+    </div>
+
+    <!-- KNN -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--purple-soft);">👥</div>
+            <div class="algo-title">K近邻 K-Nearest Neighbors</div>
+            <div class="algo-type" style="background:var(--purple-soft);color:var(--purple);">分类/回归</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>"物以类聚"——新数据的类别由它最近的 K 个邻居投票决定。</p>
+            <pre><code><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier
+
+model = KNeighborsClassifier(n_neighbors=<span class="number">5</span>)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)</code></pre>
+            <p><strong>关键参数：</strong>K 值选择（太小→过拟合，太大→欠拟合）<br>
+            <strong>注意：</strong>需要先做特征缩放（标准化），因为距离计算对量纲敏感</p>
+        </div>
+    </div>
+
+    <!-- 决策树 -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--orange-soft);">🌳</div>
+            <div class="algo-title">决策树 Decision Tree</div>
+            <div class="algo-type" style="background:var(--orange-soft);color:var(--orange);">分类/回归</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>像"20个问题"游戏，通过一系列 if-else 条件逐步缩小范围。</p>
+            <pre><code><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier
+
+model = DecisionTreeClassifier(max_depth=<span class="number">5</span>)
+model.fit(X_train, y_train)
+
+<span class="comment"># 可视化决策树</span>
+<span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> plot_tree
+plt.figure(figsize=(<span class="number">20</span>,<span class="number">10</span>))
+plot_tree(model, feature_names=X.columns,
+          filled=<span class="keyword">True</span>, rounded=<span class="keyword">True</span>)
+plt.show()</code></pre>
+            <p><strong>优点：</strong>直观可解释、不需特征缩放、能处理非线性<br>
+            <strong>缺点：</strong>容易过拟合（用 <code>max_depth</code> 控制）</p>
+        </div>
+    </div>
+
+    <!-- 随机森林 -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--cyan-soft);">🌲🌲🌲</div>
+            <div class="algo-title">随机森林 Random Forest</div>
+            <div class="algo-type" style="background:var(--cyan-soft);color:#0891b2;">集成</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>训练一堆决策树，每棵树看不同的数据子集，最终投票决定。"三个臭皮匠胜过诸葛亮"。</p>
+            <pre><code><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+
+model = RandomForestClassifier(
+    n_estimators=<span class="number">100</span>,   <span class="comment"># 100棵树</span>
+    max_depth=<span class="number">10</span>,
+    random_state=<span class="number">42</span>
+)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+<span class="comment"># 特征重要性排序</span>
+pd.Series(model.feature_importances_,
+          index=X.columns).sort_values(ascending=<span class="keyword">False</span>)</code></pre>
+            <p><strong>优点：</strong>几乎不会过拟合、准确率高、自带特征重要性<br>
+            <strong>缺点：</strong>模型大、训练慢、解释性不如单棵决策树</p>
+        </div>
+    </div>
+
+    <!-- SVM -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--pink-soft);">➖</div>
+            <div class="algo-title">支持向量机 SVM</div>
+            <div class="algo-type" style="background:var(--pink-soft);color:var(--pink);">分类</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>找一条线（或超平面），把不同类别的数据分到两边，并且让间隔最大。</p>
+            <pre><code><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC
+<span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
+
+<span class="comment"># SVM 必须先标准化！</span>
+scaler = StandardScaler()
+X_train_s = scaler.fit_transform(X_train)
+X_test_s = scaler.transform(X_test)
+
+model = SVC(kernel=<span class="string">"rbf"</span>, C=<span class="number">1.0</span>)
+model.fit(X_train_s, y_train)</code></pre>
+            <p><strong>优点：</strong>高维空间表现好、泛化能力强<br>
+            <strong>缺点：</strong>大数据集慢、需标准化、调参复杂</p>
+        </div>
+    </div>
+
+    <!-- 朴素贝叶斯 -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:var(--red-soft);">🎲</div>
+            <div class="algo-title">朴素贝叶斯 Naive Bayes</div>
+            <div class="algo-type" style="background:var(--red-soft);color:var(--red);">分类</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>基于贝叶斯定理，假设特征之间相互独立。"朴素"就是这个假设。</p>
+            <pre><code><span class="keyword">from</span> sklearn.naive_bayes <span class="keyword">import</span> GaussianNB
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)</code></pre>
+            <p><strong>优点：</strong>超快、小样本表现好、适合文本分类<br>
+            <strong>缺点：</strong>"朴素"假设在现实中常不成立</p>
+        </div>
+    </div>
+
+    <!-- 神经网络 -->
+    <div class="algo-card" onclick="this.classList.toggle('open')">
+        <div class="algo-head">
+            <div class="algo-icon" style="background:linear-gradient(135deg, #dbeafe, #f3e8ff);">🧬</div>
+            <div class="algo-title">神经网络 Neural Network (MLP)</div>
+            <div class="algo-type" style="background:var(--purple-soft);color:var(--purple);">深度学习</div>
+        </div>
+        <div class="algo-body">
+            <p><strong>原理：</strong>模仿人脑神经元连接，多层节点逐层变换数据。sklearn 的 MLPClassifier 是最简单的入门级。</p>
+            <pre><code><span class="keyword">from</span> sklearn.neural_network <span class="keyword">import</span> MLPClassifier
+
+model = MLPClassifier(
+    hidden_layer_sizes=(<span class="number">100</span>, <span class="number">50</span>),  <span class="comment"># 两层隐藏层</span>
+    max_iter=<span class="number">500</span>,
+    random_state=<span class="number">42</span>
+)
+model.fit(X_train_s, y_train)  <span class="comment"># 记得标准化</span></code></pre>
+            <p><strong>进阶：</strong>深度学习用 PyTorch / TensorFlow（图像、NLP、大模型）</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  UNSUPERVISED LEARNING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="unsupervised">
+    <span class="section-label orange">无监督学习</span>
+    <h2><span class="emoji">🔍</span> 无监督学习</h2>
+    <p>没有标签，让机器自己发现数据中的结构。</p>
+
+    <h3>K-Means 聚类</h3>
+    <pre><code><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans
+
+model = KMeans(n_clusters=<span class="number">3</span>, random_state=<span class="number">42</span>)
+labels = model.fit_predict(X)
+
+<span class="comment"># 可视化聚类结果</span>
+plt.scatter(X[:,<span class="number">0</span>], X[:,<span class="number">1</span>], c=labels, cmap=<span class="string">"viridis"</span>)
+plt.scatter(model.cluster_centers_[:,<span class="number">0</span>],
+            model.cluster_centers_[:,<span class="number">1</span>],
+            c=<span class="string">"red"</span>, marker=<span class="string">"X"</span>, s=<span class="number">200</span>, label=<span class="string">"中心"</span>)
+plt.legend()</code></pre>
+
+    <h3>肘部法选择 K 值</h3>
+    <pre><code>inertias = []
+<span class="keyword">for</span> k <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">2</span>, <span class="number">11</span>):
+    model = KMeans(n_clusters=k, random_state=<span class="number">42</span>)
+    model.fit(X)
+    inertias.append(model.inertia_)
+
+plt.plot(<span class="builtin">range</span>(<span class="number">2</span>,<span class="number">11</span>), inertias, marker=<span class="string">"o"</span>)
+plt.xlabel(<span class="string">"K值"</span>)
+plt.ylabel(<span class="string">"惯性（簇内距离之和）"</span>)
+<span class="comment"># 找"肘部"拐点 → 最佳K值</span></code></pre>
+
+    <h3>PCA 降维</h3>
+    <pre><code><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA
+
+pca = PCA(n_components=<span class="number">2</span>)        <span class="comment"># 降到2维</span>
+X_2d = pca.fit_transform(X)
+
+<span class="comment"># 看每个主成分解释了多少方差</span>
+<span class="builtin">print</span>(pca.explained_variance_ratio_)
+<span class="comment"># [0.72, 0.23] → 前两个主成分保留了95%的信息</span>
+
+plt.scatter(X_2d[:,<span class="number">0</span>], X_2d[:,<span class="number">1</span>], c=y, cmap=<span class="string">"coolwarm"</span>)
+plt.xlabel(<span class="string">"PC1"</span>)
+plt.ylabel(<span class="string">"PC2"</span>)</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  MODEL EVALUATION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="model-eval">
+    <span class="section-label red">评估</span>
+    <h2><span class="emoji">✅</span> 模型评估与选择</h2>
+
+    <h3>回归评估指标</h3>
+    <table>
+        <thead><tr><th>指标</th><th>含义</th><th>公式/代码</th></tr></thead>
+        <tbody>
+            <tr><td><strong>MSE</strong></td><td>均方误差，越小越好</td><td><code>mean_squared_error(y_test, y_pred)</code></td></tr>
+            <tr><td><strong>RMSE</strong></td><td>MSE开根号，和原始单位一致</td><td><code>np.sqrt(MSE)</code></td></tr>
+            <tr><td><strong>MAE</strong></td><td>平均绝对误差</td><td><code>mean_absolute_error(y_test, y_pred)</code></td></tr>
+            <tr><td><strong>R²</strong></td><td>解释了多少方差，越接近1越好</td><td><code>r2_score(y_test, y_pred)</code></td></tr>
+        </tbody>
+    </table>
+
+    <h3>分类评估指标</h3>
+    <table>
+        <thead><tr><th>指标</th><th>含义</th><th>代码</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Accuracy</strong></td><td>预测正确的比例</td><td><code>accuracy_score(y_test, y_pred)</code></td></tr>
+            <tr><td><strong>Precision</strong></td><td>预测为正的里面，真正为正的比例</td><td><code>precision_score(...)</code></td></tr>
+            <tr><td><strong>Recall</strong></td><td>真正为正的里面，被预测出来的比例</td><td><code>recall_score(...)</code></td></tr>
+            <tr><td><strong>F1</strong></td><td>Precision和Recall的调和平均</td><td><code>f1_score(...)</code></td></tr>
+            <tr><td><strong>AUC-ROC</strong></td><td>综合评估，越高越好（0.5=随机）</td><td><code>roc_auc_score(...)</code></td></tr>
+        </tbody>
+    </table>
+
+    <h3>完整评估代码</h3>
+    <pre><code><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> (classification_report,
+                             confusion_matrix, ConfusionMatrixDisplay)
+
+<span class="comment"># 分类报告（Precision/Recall/F1 一键出）</span>
+<span class="builtin">print</span>(classification_report(y_test, y_pred))
+
+<span class="comment"># 混淆矩阵可视化</span>
+cm = confusion_matrix(y_test, y_pred)
+ConfusionMatrixDisplay(cm).plot(cmap=<span class="string">"Blues"</span>)
+plt.title(<span class="string">"混淆矩阵"</span>)
+plt.show()</code></pre>
+
+    <h3>交叉验证（更可靠的评估）</h3>
+    <pre><code><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score
+
+<span class="comment"># 把数据分成5份，轮流用4份训练1份测试</span>
+scores = cross_val_score(model, X, y, cv=<span class="number">5</span>, scoring=<span class="string">"accuracy"</span>)
+<span class="builtin">print</span>(<span class="string">f"准确率: <span class="op">{</span>scores.mean()<span class="op">}</span> ± <span class="op">{</span>scores.std()<span class="op">}</span>"</span>)
+<span class="comment"># 比单次 train_test_split 更稳定</span></code></pre>
+
+    <div class="card tip">
+        <strong>选择模型的原则：</strong><br>
+        • 数据量小（&lt;1万）→ 优先逻辑回归、KNN、朴素贝叶斯<br>
+        • 数据量中等（1万~100万）→ 随机森林、SVM、XGBoost<br>
+        • 需要解释性 → 决策树、线性/逻辑回归<br>
+        • 不知道选什么 → 先试<strong>随机森林</strong>，大概率不会太差
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  WORKFLOW -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="workflow">
+    <span class="section-label pink">实战</span>
+    <h2><span class="emoji">🔄</span> 数据分析完整工作流</h2>
+
+    <div class="flow">
+        <div class="flow-step" style="background:#fef2f2;color:#991b1b;">1. 明确问题</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#fff7ed;color:#9a3412;">2. 收集数据</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#fefce8;color:#854d0e;">3. 数据清洗</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#f0fdf4;color:#166534;">4. EDA探索</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#ecfeff;color:#0e7490;">5. 特征工程</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#f3e8ff;color:#6b21a8;">6. 建模</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#fdf2f8;color:#9d174d;">7. 评估调优</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:#eff6ff;color:#1e40af;">8. 部署/报告</div>
+    </div>
+
+    <h3>Step 1 — 明确问题</h3>
+    <p>• 这是<strong>分类</strong>还是<strong>回归</strong>问题？<br>
+       • 预测的目标变量是什么？<br>
+       • 评估指标是什么（准确率？RMSE？F1？）</p>
+
+    <h3>Step 2 — 数据收集</h3>
+    <pre><code><span class="comment"># 常见数据来源</span>
+df = pd.read_csv(<span class="string">"data.csv"</span>)                    <span class="comment"># 本地文件</span>
+df = pd.read_csv(<span class="string">"https://xxx/data.csv"</span>)          <span class="comment"># URL</span>
+df = pd.read_excel(<span class="string">"data.xlsx"</span>, sheet_name=<span class="string">"Sheet1"</span>)
+<span class="comment"># Kaggle数据集、政府公开数据、API爬取…</span></code></pre>
+
+    <h3>Step 3 — 数据清洗</h3>
+    <pre><code><span class="comment"># 1. 看整体情况</span>
+df.info()
+df.describe()
+df.isnull().<span class="builtin">sum</span>()
+
+<span class="comment"># 2. 处理缺失值</span>
+df.dropna(subset=[<span class="string">"关键列"</span>])              <span class="comment"># 关键列缺失就删行</span>
+df[<span class="string">"数值列"</span>].fillna(df[<span class="string">"数值列"</span>].median()) <span class="comment"># 用中位数填充</span>
+df[<span class="string">"分类列"</span>].fillna(<span class="string">"未知"</span>)               <span class="comment"># 用常量填充</span>
+
+<span class="comment"># 3. 处理重复值</span>
+df.drop_duplicates(inplace=<span class="keyword">True</span>)
+
+<span class="comment"># 4. 处理异常值（用IQR方法）</span>
+Q1 = df[<span class="string">"列名"</span>].quantile(<span class="number">0.25</span>)
+Q3 = df[<span class="string">"列名"</span>].quantile(<span class="number">0.75</span>)
+IQR = Q3 - Q1
+mask = (df[<span class="string">"列名"</span>] >= Q1 - <span class="number">1.5</span>*IQR) & (df[<span class="string">"列名"</span>] <= Q3 + <span class="number">1.5</span>*IQR)
+df = df[mask]</code></pre>
+
+    <h3>Step 4 — 探索性数据分析（EDA）</h3>
+    <pre><code><span class="comment"># 1. 目标变量分布</span>
+sns.histplot(df[<span class="string">"目标列"</span>], kde=<span class="keyword">True</span>)
+
+<span class="comment"># 2. 特征与目标的关系</span>
+<span class="keyword">for</span> col <span class="keyword">in</span> numeric_cols:
+    sns.scatterplot(x=col, y=<span class="string">"目标列"</span>, data=df)
+    plt.title(<span class="string">f"<span class="op">{</span>col<span class="op">}</span> vs 目标列"</span>)
+    plt.show()
+
+<span class="comment"># 3. 相关性热力图</span>
+plt.figure(figsize=(<span class="number">12</span>, <span class="number">8</span>))
+sns.heatmap(df.corr(), annot=<span class="keyword">True</span>, fmt=<span class="string">".2f"</span>,
+            cmap=<span class="string">"RdBu_r"</span>, center=<span class="number">0</span>)
+plt.title(<span class="string">"特征相关性矩阵"</span>)
+plt.tight_layout()
+plt.show()
+
+<span class="comment"># 4. 分类变量 vs 目标</span>
+sns.boxplot(x=<span class="string">"分类列"</span>, y=<span class="string">"目标列"</span>, data=df)</code></pre>
+
+    <h3>Step 5 — 特征工程</h3>
+    <pre><code><span class="comment"># 1. 分类变量编码</span>
+df = pd.get_dummies(df, columns=[<span class="string">"分类列"</span>], drop_first=<span class="keyword">True</span>)  <span class="comment"># One-Hot</span>
+
+<span class="comment"># 2. 数值标准化</span>
+<span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
+scaler = StandardScaler()
+df[num_cols] = scaler.fit_transform(df[num_cols])
+
+<span class="comment"># 3. 创建新特征</span>
+df[<span class="string">"新特征"</span>] = df[<span class="string">"特征A"</span>] / (df[<span class="string">"特征B"</span>] + <span class="number">1</span>)
+
+<span class="comment"># 4. 特征选择（去掉相关性太高的冗余特征）</span>
+corr_matrix = df.corr().abs()
+upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=<span class="number">1</span>).astype(<span class="builtin">bool</span>))
+to_drop = [col <span class="keyword">for</span> col <span class="keyword">in</span> upper.columns <span class="keyword">if</span> <span class="builtin">any</span>(upper[col] > <span class="number">0.95</span>)]
+df.drop(to_drop, axis=<span class="number">1</span>, inplace=<span class="keyword">True</span>)</code></pre>
+
+    <h3>Step 6–7 — 建模 + 评估 + 调参</h3>
+    <pre><code><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV
+
+<span class="comment"># 用网格搜索自动找最佳参数</span>
+param_grid = {
+    <span class="string">"n_estimators"</span>: [<span class="number">50</span>, <span class="number">100</span>, <span class="number">200</span>],
+    <span class="string">"max_depth"</span>: [<span class="number">5</span>, <span class="number">10</span>, <span class="number">None</span>],
+    <span class="string">"min_samples_split"</span>: [<span class="number">2</span>, <span class="number">5</span>]
+}
+
+grid = GridSearchCV(
+    RandomForestClassifier(random_state=<span class="number">42</span>),
+    param_grid, cv=<span class="number">5</span>, scoring=<span class="string">"accuracy"</span>,
+    n_jobs=-<span class="number">1</span>, verbose=<span class="number">1</span>
+)
+grid.fit(X_train, y_train)
+
+<span class="builtin">print</span>(<span class="string">f"最佳参数: <span class="op">{</span>grid.best_params_<span class="op">}</span>"</span>)
+<span class="builtin">print</span>(<span class="string">f"最佳准确率: <span class="op">{</span>grid.best_score_<span class="op">}</span>:.4f"</span>)
+
+<span class="comment"># 用最佳模型预测</span>
+best_model = grid.best_estimator_
+y_pred = best_model.predict(X_test)</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  FEATURE ENGINEERING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="feature-eng">
+    <span class="section-label cyan">进阶</span>
+    <h2><span class="emoji">⚙️</span> 特征工程详解</h2>
+    <p>特征工程是机器学习中<strong>最能提升效果</strong>的环节。"数据和特征决定了效果上限，模型只是逼近这个上限。"</p>
+
+    <div class="grid">
+        <div class="card">
+            <h4>🔢 数值特征</h4>
+            <ul class="check-list">
+                <li>标准化（StandardScaler）</li>
+                <li>归一化（MinMaxScaler）</li>
+                <li>对数变换（处理偏态分布）</li>
+                <li>多项式特征（特征交叉）</li>
+                <li>分箱（连续→离散）</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4>🏷️ 分类特征</h4>
+            <ul class="check-list">
+                <li>One-Hot 编码</li>
+                <li>Label 编码（有序分类）</li>
+                <li>Target 编码</li>
+                <li>频率编码</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4>📅 时间特征</h4>
+            <ul class="check-list">
+                <li>提取年/月/日/星期/小时</li>
+                <li>是否周末/节假日</li>
+                <li>时间差（距今多少天）</li>
+                <li>滑动窗口统计量</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4>📝 文本特征</h4>
+            <ul class="check-list">
+                <li>TF-IDF 向量化</li>
+                <li>词袋模型</li>
+                <li>文本长度/词数</li>
+                <li>情感分数</li>
+            </ul>
+        </div>
+    </div>
+
+    <pre><code><span class="comment"># 数值变换示例</span>
+df[<span class="string">"log_收入"</span>] = np.log1p(df[<span class="string">"收入"</span>])     <span class="comment"># 对数变换（处理右偏）</span>
+df[<span class="string">"收入_分箱"</span>] = pd.qcut(df[<span class="string">"收入"</span>], q=<span class="number">5</span>, labels=[<span class="string">"低"</span>,<span class="string">"较低"</span>,<span class="string">"中"</span>,<span class="string">"较高"</span>,<span class="string">"高"</span>])
+
+<span class="comment"># 日期特征提取</span>
+df[<span class="string">"日期"</span>] = pd.to_datetime(df[<span class="string">"日期"</span>])
+df[<span class="string">"年"</span>] = df[<span class="string">"日期"</span>].dt.year
+df[<span class="string">"月"</span>] = df[<span class="string">"日期"</span>].dt.month
+df[<span class="string">"星期几"</span>] = df[<span class="string">"日期"</span>].dt.dayofweek
+df[<span class="string">"是否周末"</span>] = (df[<span class="string">"星期几"</span>] >= <span class="number">5</span>).astype(<span class="builtin">int</span>)</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PROJECTS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="projects">
+    <span class="section-label pink">实战</span>
+    <h2><span class="emoji">🚀</span> 推荐实战项目</h2>
+    <p>按难度递增，建议每完成一个项目就回头补知识短板：</p>
+
+    <table>
+        <thead><tr><th>#</th><th>项目</th><th>类型</th><th>核心技能</th><th>数据来源</th></tr></thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><strong>泰坦尼克号生存预测</strong></td>
+                <td>二分类</td>
+                <td>EDA + 缺失值 + 编码 + 决策树</td>
+                <td><a href="https://www.kaggle.com/c/titanic">Kaggle</a></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><strong>鸢尾花分类</strong></td>
+                <td>多分类</td>
+                <td>KNN + SVM + 可视化决策边界</td>
+                <td>sklearn内置</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><strong>波士顿房价预测</strong></td>
+                <td>回归</td>
+                <td>线性回归 + 特征工程 + R²评估</td>
+                <td><a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques">Kaggle</a></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><strong>客户流失预测</strong></td>
+                <td>二分类</td>
+                <td>逻辑回归 + 不平衡数据 + ROC曲线</td>
+                <td>Kaggle Telco</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><strong>电商用户分群</strong></td>
+                <td>聚类</td>
+                <td>K-Means + PCA降维 + 可视化</td>
+                <td>Kaggle Mall</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><strong>股票价格分析</strong></td>
+                <td>时序</td>
+                <td>Pandas时间序列 + 移动平均 + 可视化</td>
+                <td>yfinance库</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><strong>电影推荐系统</strong></td>
+                <td>推荐</td>
+                <td>协同过滤 + 余弦相似度</td>
+                <td>MovieLens</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>泰坦尼克号实战（完整代码）</h3>
+    <pre><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split, cross_val_score
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report
+
+<span class="comment"># ① 加载数据</span>
+df = pd.read_csv(<span class="string">"titanic.csv"</span>)
+<span class="builtin">print</span>(df.shape)
+df.head()
+
+<span class="comment"># ② EDA</span>
+sns.countplot(x=<span class="string">"Survived"</span>, data=df)         <span class="comment"># 看存活分布</span>
+sns.countplot(x=<span class="string">"Pclass"</span>, hue=<span class="string">"Survived"</span>, data=df) <span class="comment"># 舱位vs存活</span>
+sns.histplot(df[<span class="string">"Age"</span>].dropna(), kde=<span class="keyword">True</span>)   <span class="comment"># 年龄分布</span>
+
+<span class="comment"># ③ 数据清洗</span>
+df[<span class="string">"Age"</span>].fillna(df[<span class="string">"Age"</span>].median(), inplace=<span class="keyword">True</span>)
+df[<span class="string">"Embarked"</span>].fillna(df[<span class="string">"Embarked"</span>].mode()[<span class="number">0</span>], inplace=<span class="keyword">True</span>)
+df.drop([<span class="string">"Cabin"</span>, <span class="string">"Name"</span>, <span class="string">"Ticket"</span>, <span class="string">"PassengerId"</span>], axis=<span class="number">1</span>, inplace=<span class="keyword">True</span>)
+
+<span class="comment"># ④ 特征工程</span>
+df[<span class="string">"Sex"</span>] = df[<span class="string">"Sex"</span>].map({<span class="string">"male"</span>: <span class="number">0</span>, <span class="string">"female"</span>: <span class="number">1</span>})
+df = pd.get_dummies(df, columns=[<span class="string">"Embarked"</span>], drop_first=<span class="keyword">True</span>)
+df[<span class="string">"FamilySize"</span>] = df[<span class="string">"SibSp"</span>] + df[<span class="string">"Parch"</span>] + <span class="number">1</span>  <span class="comment"># 新特征</span>
+
+<span class="comment"># ⑤ 建模</span>
+X = df.drop(<span class="string">"Survived"</span>, axis=<span class="number">1</span>)
+y = df[<span class="string">"Survived"</span>]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>
+)
+
+model = RandomForestClassifier(n_estimators=<span class="number">100</span>, max_depth=<span class="number">8</span>, random_state=<span class="number">42</span>)
+model.fit(X_train, y_train)
+
+<span class="comment"># ⑥ 评估</span>
+y_pred = model.predict(X_test)
+<span class="builtin">print</span>(classification_report(y_test, y_pred))
+
+<span class="comment"># 交叉验证</span>
+scores = cross_val_score(model, X, y, cv=<span class="number">5</span>)
+<span class="builtin">print</span>(<span class="string">f"5折交叉验证准确率: <span class="op">{</span>scores.mean()<span class="op">}</span>:.3f ± <span class="op">{</span>scores.std()<span class="op">}</span>:.3f"</span>)
+
+<span class="comment"># ⑦ 特征重要性</span>
+pd.Series(model.feature_importances_, index=X.columns)\
+  .sort_values(ascending=<span class="keyword">True</span>).plot(kind=<span class="string">"barh"</span>)
+plt.title(<span class="string">"特征重要性"</span>)
+plt.tight_layout()
+plt.show()</code></pre>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  RESOURCES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="resources">
+    <span class="section-label blue">资源</span>
+    <h2><span class="emoji">📚</span> 学习资源</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h4>📖 官方文档</h4>
+            <ul class="check-list">
+                <li><a href="https://numpy.org/doc/stable/">NumPy Docs</a></li>
+                <li><a href="https://pandas.pydata.org/docs/">Pandas Docs</a></li>
+                <li><a href="https://matplotlib.org/stable/">Matplotlib Docs</a></li>
+                <li><a href="https://scikit-learn.org/stable/">scikit-learn Docs</a></li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4>📹 免费课程</h4>
+            <ul class="check-list">
+                <li><a href="https://www.kaggle.com/learn">Kaggle Learn</a>（交互式）</li>
+                <li><a href="https://www.bilibili.com/video/BV1Y7411c7QK/">吴恩达 ML（B站）</a></li>
+                <li><a href="https://www.bilibili.com/video/BV1B7411L7Qt/">莫烦Python（B站）</a></li>
+                <li><a href="https://www.3blue1brown.com/">3Blue1Brown（线性代数）</a></li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4>🏆 练手平台</h4>
+            <ul class="check-list">
+                <li><a href="https://www.kaggle.com/competitions">Kaggle 竞赛</a></li>
+                <li><a href="https://tianchi.aliyun.com/">阿里天池</a></li>
+                <li><a href="https://www.datafountain.cn/">DataFountain</a></li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4>📗 推荐书籍</h4>
+            <ul class="check-list">
+                <li>《利用Python进行数据分析》Wes McKinney</li>
+                <li>《Python机器学习》Sebastian Raschka</li>
+                <li>《统计学习方法》李航</li>
+                <li>《Hands-On ML》Aurélien Géron</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card highlight" style="margin-top:32px;">
+        <h4 style="margin-top:0;">🎯 最后一条建议</h4>
+        <p style="font-size:1.05rem; margin:0;">
+            <strong>不要试图"学完再动手"。</strong><br><br>
+            学完 NumPy → 立刻用它处理一份数据<br>
+            学完 Pandas → 立刻用它清洗一份 CSV<br>
+            学完 Matplotlib → 立刻画 10 张图<br>
+            学完第一个算法 → 立刻跑通 Kaggle Titanic<br><br>
+            数据分析是一门<strong>手艺</strong>，不是一门<strong>考试</strong>。敲 100 行代码胜过读 100 页书。
+        </p>
+    </div>
+</div>
+
+</div><!-- end content -->
+
+<div style="text-align:center; padding:48px 20px 0; font-size:.8rem; color:var(--text-3);">
+    Python 数据分析与机器学习 · 完全学习指南 · 2026
+</div>
+
+</div><!-- end main -->
+
+<script>
+// ── Reading progress bar ──
+window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('readProgress').style.width = pct + '%';
+});
+
+// ── Sidebar active state ──
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.sidebar a');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+});
+
+// ── Close sidebar on mobile when clicking a link ──
+navLinks.forEach(a => a.addEventListener('click', () => {
+    if (window.innerWidth < 900) document.getElementById('sidebar').classList.remove('show');
+}));
+
+// ── Init algo cards: none open ──
+document.querySelectorAll('.algo-card').forEach(c => c.classList.remove('open'));
+</script>
+</body>
+</html>
