@@ -1,0 +1,15 @@
+# 让仓库语言统计正确显示为 Python：
+# 文档类与外部数据集不计入 GitHub linguist 的语言占比，
+# 否则 OtherFiles/learning_guide.html 会盖过 CodeFile 下的 .py，仓库被标成 HTML。
+
+OtherFiles/**  linguist-documentation
+docs/**        linguist-documentation
+实验报告/**     linguist-documentation
+Dataset/**     linguist-vendored
+
+# 二进制文件不做行尾转换与 diff
+*.docx  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.pdf   binary
